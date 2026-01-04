@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Найди пару</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background: black;
+            min-height: 100%;
+            font-family: "Arial", sans-serif;
+        }
+
+        .wrap {
+            position: relative;
+            height: 100%;
+            min-height: 500px;
+            padding-bottom: 20px;
+        }
+
+        .game {
+            transform-style: preserve-3d;
+            perspective: 500px;
+            min-height: 100%;
+            height: 100%;
+        }
+
+
+
+        .card {
+            float: left;
+            width: 16.66666%;
+            height: 25%;
+            padding: 5px;
+            text-align: center;
+            display: block;
+            perspective: 500px;
+            position: relative;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        @media (max-width: 800px) {
+            .card {
+                width: 25%;
+                height: 16.666%;
+            }
+        }
+
+        .card .inside {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transform-style: preserve-3d;
+            transition: 0.4s ease-in-out;
+            background: white;
+        }
+
+
+
+        .card .front,
+        .card .back {
+            border: 1px solid black;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+
+        .card .front img,
+        .card .back img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            max-height: 100%;
+        }
+
+        .card .front {
+            transform: rotateY(-180deg);
+        }
+
+        @media (max-width: 800px) {
+            .card .front {
+                padding: 5px;
+            }
+
+            .card .back {
+                padding: 10px;
+            }
+        }
+
+        .card .inside.picked,
+        .card .inside.matched {
+            transform: rotateY(180deg);
+        }
+
+        @keyframes matchAnim {
+            0% {
+                background: #bcffcc;
+            }
+
+            100% {
+                backgroud: white;
+            }
+        }
+
+        @-webkit-keyframes matchAnim {
+            0% {
+                background: #bcffcc;
+            }
+
+            100% {
+                background: white;
+            }
+        }
+
+        .card .inside.matched {
+            -webkit-animation: 1s matchAnim ease-in-out;
+            animation: 1s matchAnim ease-in-out;
+            -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s;
+        }
+
+        .modal-overlay {
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: relative;
+            width: 1000px;
+            height: 300px;
+            max-height: 90%;
+            max-width: 90%;
+            min-height: 380px;
+            margin: 0 auto;
+            background: white;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 30px 10px;
+        }
+
+        .modal .winner {
+            font-size: 80px;
+            text-align: center;
+            color: #4d4d4d;
+            text-shadow: 0px 3px 0 black;
+        }
+
+        @media (max-width: 480px) {
+            .modal .winner {
+                font-size: 60px;
+            }
+        }
+
+        .modal .restart {
+            margin: 30px auto;
+            padding: 20px 30px;
+            display: block;
+            font-size: 30px;
+            border: none;
+            background: #4d4d4d;
+            background: linear-gradient(#4d4d4d, #222);
+            border: 1px solid #222;
+            border-radius: 5px;
+            color: white;
+            text-shadow: 0px 1px 0 black;
+            cursor: pointer;
+        }
+
+        .modal .restart:hover {
+            background: linear-gradient(#222, black);
+        }
+
+        .modal .message {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="game"></div>
+
+        <div class="modal-overlay">
+            <div class="modal">
+                <h2 class="winner">Победа! Поздравляю с днем свадьбы и желаю всего самого лучшего!</h2>
+                <button class="restart">Сыграем ещё?</button>
+            </div>
+        </div>
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script>
+        (function () {
+
+            var Memory = {
+
+                init: function (cards) {
+                    this.$game = $(".game");
+                    this.$modal = $(".modal");
+                    this.$overlay = $(".modal-overlay");
+                    this.$restartButton = $("button.restart");
+                    this.cardsArray = $.merge(cards, cards);
+                    this.shuffleCards(this.cardsArray);
+                    this.setup();
+                },
+
+                shuffleCards: function (cardsArray) {
+                    this.$cards = $(this.shuffle(this.cardsArray));
+                },
+
+                setup: function () {
+                    this.html = this.buildHTML();
+                    this.$game.html(this.html);
+                    this.$memoryCards = $(".card");
+                    this.paused = false;
+                    this.guess = null;
+                    this.binding();
+                },
+
+                binding: function () {
+                    this.$memoryCards.on("click", this.cardClicked);
+                    this.$restartButton.on("click", $.proxy(this.reset, this));
+                },
+
+                cardClicked: function () {
+                    var _ = Memory;
+                    var $card = $(this);
+                    if (!_.paused && !$card.find(".inside").hasClass("matched") && !$card.find(".inside").hasClass("picked")) {
+                        $card.find(".inside").addClass("picked");
+                        if (!_.guess) {
+                            _.guess = $(this).attr("data-id");
+                        } else if (_.guess == $(this).attr("data-id") && !$(this).hasClass("picked")) {
+                            $(".picked").addClass("matched");
+                            _.guess = null;
+                        } else {
+                            _.guess = null;
+                            _.paused = true;
+                            setTimeout(function () {
+                                $(".picked").removeClass("picked");
+                                Memory.paused = false;
+                            }, 600);
+                        }
+                        if ($(".matched").length == $(".card").length) {
+                            _.win();
+                        }
+                    }
+                },
+
+                win: function () {
+                    this.paused = true;
+                    setTimeout(function () {
+                        Memory.showModal();
+                        Memory.$game.fadeOut();
+                    }, 1000);
+                },
+
+                showModal: function () {
+                    this.$overlay.show();
+                    this.$modal.fadeIn("slow");
+                },
+
+                hideModal: function () {
+                    this.$overlay.hide();
+                    this.$modal.hide();
+                },
+
+                reset: function () {
+                    this.hideModal();
+                    this.shuffleCards(this.cardsArray);
+                    this.setup();
+                    this.$game.show("slow");
+                },
+
+                shuffle: function (array) {
+                    var counter = array.length, temp, index;
+                    while (counter > 0) {
+                        index = Math.floor(Math.random() * counter);
+                        counter--;
+                        temp = array[counter];
+                        array[counter] = array[index];
+                        array[index] = temp;
+                    }
+                    return array;
+                },
+
+                buildHTML: function () {
+                    var frag = '';
+                    this.$cards.each(function (k, v) {
+                        frag += '<div class="card" data-id="' + v.id + '"><div class="inside">\
+				<div class="front"><img src="'+ v.img + '"\
+				alt="'+ v.name + '" /></div>\
+				<div class="back"><img src="https://static.vecteezy.com/system/resources/previews/000/371/240/original/calligraphic-quote-wedding-day-vector-text-on-white-background.jpg"\
+				alt="Codepen" /></div></div>\
+				</div>';
+                    });
+                    return frag;
+                }
+            };
+
+            var cards = [
+                {
+                    name: "php",
+                    img: "https://www.marthastewart.com/thmb/nVTL2kpV8Y9fUWtJsNX22Y9TiQ0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/madeline-james-wedding-couple-0422-71c410b79316461997eb0c63de0d4aa6.jpg",
+                    id: 1,
+                },
+                {
+                    name: "css3",
+                    img: "https://cdn.shopify.com/s/files/1/0553/6422/3136/files/wedding-photo-ideas_studio_n_photography.jpg?v=1683859484",
+                    id: 2
+                },
+                {
+                    name: "html5",
+                    img: "https://www.brides.com/thmb/fJSfAbT8DxJs4dW79wcWZEQZgJs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/must-take-wedding-photos-bride-groom-walk-clary-prfeiffer-photography-0723-primary-b4221bcb1a2b43e6b0820a8c3e3bce52.jpg",
+                    id: 3
+                },
+                {
+                    name: "jquery",
+                    img: "https://www.brides.com/thmb/d_HmEMjHNcFYnz6ZrQaIT_CPXG8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/01-Wedding-Pose-Ivy-Weddings-Main-8686937cf91b4f1f94ddaa05dfc3778e.jpg",
+                    id: 4
+                },
+                {
+                    name: "javascript",
+                    img: "https://i1.wp.com/emmathurgood.com/wp-content/uploads/2021/09/how-to-plan-a-small-wedding.jpg?resize=960%2C704&ssl=1",
+                    id: 5
+                },
+                {
+                    name: "node",
+                    img: "https://www.printique.com/wp-content/uploads/2019/06/wedding-poses-3.jpg",
+                    id: 6
+                },
+                {
+                    name: "photoshop",
+                    img: "https://images.squarespace-cdn.com/content/v1/5e120e4e977d182367a0ba7b/44622fb2-aebe-4065-9573-2a16de0c8855/Howtoelopewithoutupsettingfamily.jpg",
+                    id: 7
+                },
+                {
+                    name: "python",
+                    img: "https://2brides.se/wp-content/uploads/2018/03/2-Brides-Photography_Ladow-Wedding_0092.jpg",
+                    id: 8
+                },
+                {
+                    name: "rails",
+                    img: "https://i0.wp.com/greenweddingshoes.com/wp-content/uploads/2024/04/Metallic_Western_01.jpg?fit=1024%2C9999",
+                    id: 9
+                },
+                {
+                    name: "sass",
+                    img: "https://tawneebreephoto.com/wp-content/uploads/sites/22028/2022/12/Bohemian-Western-Wedding-In-Montana2638.jpg",
+                    id: 10
+                },
+                {
+                    name: "sublime",
+                    img: "https://images.squarespace-cdn.com/content/v1/5693b0d2841aba578b013c12/5b9cd768-2e89-46b1-8931-5a63910e5c9f/central-jersey-wedding-photographer_0312.jpg",
+                    id: 11
+                },
+                {
+                    name: "wordpress",
+                    img: "https://images.squarespace-cdn.com/content/v1/59a81a2059cc6896042f5ce7/1634676111828-Z18KP7Q4LO7PST2RVHZ7/DSC_4237.JPG",
+                    id: 12
+                },
+            ];
+
+            Memory.init(cards);
+
+
+        })();
+    </script>
+
+</body>
+
+</html>
