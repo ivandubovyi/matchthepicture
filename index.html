@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Match The Picture</title>
+    <title>Match The Animals</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <style>
@@ -36,8 +36,6 @@
             height: 100%;
         }
 
-
-
         .card {
             float: left;
             width: 16.66666%;
@@ -66,8 +64,6 @@
             transition: 0.4s ease-in-out;
             background: white;
         }
-
-
 
         .card .front,
         .card .back {
@@ -197,7 +193,6 @@
             text-align: center;
         }
     </style>
-
 </head>
 
 <body>
@@ -206,7 +201,7 @@
 
         <div class="modal-overlay">
             <div class="modal">
-                <h2 class="winner">Vicotry! Congrats, you won the Match The Picture game!</h2>
+                <h2 class="winner">Victory! Congrats, you won the Match The Animals game!</h2>
                 <button class="restart">Play again?</button>
             </div>
         </div>
@@ -311,11 +306,11 @@
                     var frag = '';
                     this.$cards.each(function (k, v) {
                         frag += '<div class="card" data-id="' + v.id + '"><div class="inside">\
-				<div class="front"><img src="'+ v.img + '"\
-				alt="'+ v.name + '" /></div>\
-				<div class="back"><img src="https://static.vecteezy.com/system/resources/previews/000/371/240/original/calligraphic-quote-wedding-day-vector-text-on-white-background.jpg"\
-				alt="Codepen" /></div></div>\
-				</div>';
+                <div class="front"><img src="' + v.img + '"\
+                alt="' + v.name + '" /></div>\
+                <div class="back"><img src="https://static.vecteezy.com/system/resources/previews/000/371/240/original/calligraphic-quote-wedding-day-vector-text-on-white-background.jpg"\
+                alt="Card Back" /></div></div>\
+                </div>';
                     });
                     return frag;
                 }
@@ -323,69 +318,68 @@
 
             var cards = [
                 {
-                    name: "php",
-                    img: "https://www.marthastewart.com/thmb/nVTL2kpV8Y9fUWtJsNX22Y9TiQ0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/madeline-james-wedding-couple-0422-71c410b79316461997eb0c63de0d4aa6.jpg",
-                    id: 1,
+                    name: "Lion",
+                    img: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80",
+                    id: 1
                 },
                 {
-                    name: "css3",
-                    img: "https://cdn.shopify.com/s/files/1/0553/6422/3136/files/wedding-photo-ideas_studio_n_photography.jpg?v=1683859484",
+                    name: "Tiger",
+                    img: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
                     id: 2
                 },
                 {
-                    name: "html5",
-                    img: "https://www.brides.com/thmb/fJSfAbT8DxJs4dW79wcWZEQZgJs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/must-take-wedding-photos-bride-groom-walk-clary-prfeiffer-photography-0723-primary-b4221bcb1a2b43e6b0820a8c3e3bce52.jpg",
+                    name: "Elephant",
+                    img: "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=800&q=80",
                     id: 3
                 },
                 {
-                    name: "jquery",
-                    img: "https://www.brides.com/thmb/d_HmEMjHNcFYnz6ZrQaIT_CPXG8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/01-Wedding-Pose-Ivy-Weddings-Main-8686937cf91b4f1f94ddaa05dfc3778e.jpg",
+                    name: "Zebra",
+                    img: "https://images.unsplash.com/photo-1526318472351-c75fcf070305?auto=format&fit=crop&w=800&q=80",
                     id: 4
                 },
                 {
-                    name: "javascript",
-                    img: "https://i1.wp.com/emmathurgood.com/wp-content/uploads/2021/09/how-to-plan-a-small-wedding.jpg?resize=960%2C704&ssl=1",
+                    name: "Giraffe",
+                    img: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=800&q=80",
                     id: 5
                 },
                 {
-                    name: "node",
-                    img: "https://www.printique.com/wp-content/uploads/2019/06/wedding-poses-3.jpg",
+                    name: "Panda",
+                    img: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&fit=crop&w=800&q=80",
                     id: 6
                 },
                 {
-                    name: "photoshop",
-                    img: "https://images.squarespace-cdn.com/content/v1/5e120e4e977d182367a0ba7b/44622fb2-aebe-4065-9573-2a16de0c8855/Howtoelopewithoutupsettingfamily.jpg",
+                    name: "Koala",
+                    img: "https://images.unsplash.com/photo-1520808663317-647b476a81b9?auto=format&fit=crop&w=800&q=80",
                     id: 7
                 },
                 {
-                    name: "python",
-                    img: "https://2brides.se/wp-content/uploads/2018/03/2-Brides-Photography_Ladow-Wedding_0092.jpg",
+                    name: "Fox",
+                    img: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?auto=format&fit=crop&w=800&q=80",
                     id: 8
                 },
                 {
-                    name: "rails",
-                    img: "https://i0.wp.com/greenweddingshoes.com/wp-content/uploads/2024/04/Metallic_Western_01.jpg?fit=1024%2C9999",
+                    name: "Wolf",
+                    img: "https://images.unsplash.com/photo-1474511016488-0067309c4c28?auto=format&fit=crop&w=800&q=80",
                     id: 9
                 },
                 {
-                    name: "sass",
-                    img: "https://tawneebreephoto.com/wp-content/uploads/sites/22028/2022/12/Bohemian-Western-Wedding-In-Montana2638.jpg",
+                    name: "Owl",
+                    img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=800&q=80",
                     id: 10
                 },
                 {
-                    name: "sublime",
-                    img: "https://images.squarespace-cdn.com/content/v1/5693b0d2841aba578b013c12/5b9cd768-2e89-46b1-8931-5a63910e5c9f/central-jersey-wedding-photographer_0312.jpg",
+                    name: "Penguin",
+                    img: "https://images.unsplash.com/photo-1551986782-d0169b3f8fa7?auto=format&fit=crop&w=800&q=80",
                     id: 11
                 },
                 {
-                    name: "wordpress",
-                    img: "https://images.squarespace-cdn.com/content/v1/59a81a2059cc6896042f5ce7/1634676111828-Z18KP7Q4LO7PST2RVHZ7/DSC_4237.JPG",
+                    name: "Dolphin",
+                    img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
                     id: 12
-                },
+                }
             ];
 
             Memory.init(cards);
-
 
         })();
     </script>
