@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Match The Animals</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
-        html,
-        body {
-            height: 100%;
-        }
+        html, body { height: 100%; }
 
         body {
-            background: black;
+            background: #f5f5f0;
             min-height: 100%;
             font-family: "Arial", sans-serif;
         }
@@ -50,10 +46,7 @@
         }
 
         @media (max-width: 800px) {
-            .card {
-                width: 25%;
-                height: 16.666%;
-            }
+            .card { width: 25%; height: 16.666%; }
         }
 
         .card .inside {
@@ -67,37 +60,49 @@
 
         .card .front,
         .card .back {
-            border: 1px solid black;
+            border: 1px solid #ddd;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-        }
-
-        .card .front img,
-        .card .back img {
-            max-width: 100%;
-            display: block;
-            margin: 0 auto;
-            max-height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
         }
 
         .card .front {
             transform: rotateY(-180deg);
+            padding: 0;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .card .front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card .back {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .card .back .back-label {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(14px, 2.5vw, 30px);
+            font-weight: 700;
+            color: #111;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-align: center;
         }
 
         @media (max-width: 800px) {
-            .card .front {
-                padding: 5px;
-            }
-
-            .card .back {
-                padding: 10px;
-            }
+            .card .back .back-label { font-size: clamp(10px, 3.5vw, 18px); }
         }
 
         .card .inside.picked,
@@ -106,23 +111,12 @@
         }
 
         @keyframes matchAnim {
-            0% {
-                background: #bcffcc;
-            }
-
-            100% {
-                backgroud: white;
-            }
+            0% { background: #d4f5dd; }
+            100% { background: white; }
         }
-
         @-webkit-keyframes matchAnim {
-            0% {
-                background: #bcffcc;
-            }
-
-            100% {
-                background: white;
-            }
+            0% { background: #d4f5dd; }
+            100% { background: white; }
         }
 
         .card .inside.matched {
@@ -134,64 +128,63 @@
 
         .modal-overlay {
             display: none;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.4);
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
         }
 
         .modal {
             display: none;
             position: relative;
             width: 1000px;
-            height: 300px;
-            max-height: 90%;
             max-width: 90%;
             min-height: 380px;
             margin: 0 auto;
-            background: white;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
             top: 50%;
             transform: translateY(-50%);
-            padding: 30px 10px;
+            padding: 40px 20px;
         }
 
         .modal .winner {
-            font-size: 80px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 52px;
             text-align: center;
-            color: #4d4d4d;
-            text-shadow: 0px 3px 0 black;
+            color: #111;
+            line-height: 1.2;
+        }
+
+        .modal .winner span {
+            display: block;
+            font-size: 22px;
+            color: #666;
+            margin-top: 12px;
+            font-family: Arial, sans-serif;
+            font-weight: normal;
+            letter-spacing: 0;
         }
 
         @media (max-width: 480px) {
-            .modal .winner {
-                font-size: 60px;
-            }
+            .modal .winner { font-size: 32px; }
+            .modal .winner span { font-size: 16px; }
         }
 
         .modal .restart {
             margin: 30px auto;
-            padding: 20px 30px;
+            padding: 14px 36px;
             display: block;
-            font-size: 30px;
-            border: none;
-            background: #4d4d4d;
-            background: linear-gradient(#4d4d4d, #222);
-            border: 1px solid #222;
-            border-radius: 5px;
-            color: white;
-            text-shadow: 0px 1px 0 black;
+            font-size: 20px;
+            border: 1.5px solid #111;
+            background: #111;
+            border-radius: 4px;
+            color: #fff;
             cursor: pointer;
+            font-family: Arial, sans-serif;
         }
 
-        .modal .restart:hover {
-            background: linear-gradient(#222, black);
-        }
-
-        .modal .message {
-            text-align: center;
-        }
+        .modal .restart:hover { background: #333; }
     </style>
 
 </head>
@@ -199,10 +192,9 @@
 <body>
     <div class="wrap">
         <div class="game"></div>
-
         <div class="modal-overlay">
             <div class="modal">
-                <h2 class="winner">Victory! Congrats, you won the Match The Animals game!</h2>
+                <h2 class="winner">All matched!<span>You found every animal. Well played!</span></h2>
                 <button class="restart">Play again?</button>
             </div>
         </div>
@@ -211,9 +203,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script>
         (function () {
-
             var Memory = {
-
                 init: function (cards) {
                     this.$game = $(".game");
                     this.$modal = $(".modal");
@@ -223,11 +213,9 @@
                     this.shuffleCards(this.cardsArray);
                     this.setup();
                 },
-
                 shuffleCards: function (cardsArray) {
                     this.$cards = $(this.shuffle(this.cardsArray));
                 },
-
                 setup: function () {
                     this.html = this.buildHTML();
                     this.$game.html(this.html);
@@ -236,12 +224,10 @@
                     this.guess = null;
                     this.binding();
                 },
-
                 binding: function () {
                     this.$memoryCards.on("click", this.cardClicked);
                     this.$restartButton.on("click", $.proxy(this.reset, this));
                 },
-
                 cardClicked: function () {
                     var _ = Memory;
                     var $card = $(this);
@@ -260,12 +246,9 @@
                                 Memory.paused = false;
                             }, 600);
                         }
-                        if ($(".matched").length == $(".card").length) {
-                            _.win();
-                        }
+                        if ($(".matched").length == $(".card").length) { _.win(); }
                     }
                 },
-
                 win: function () {
                     this.paused = true;
                     setTimeout(function () {
@@ -273,24 +256,20 @@
                         Memory.$game.fadeOut();
                     }, 1000);
                 },
-
                 showModal: function () {
                     this.$overlay.show();
                     this.$modal.fadeIn("slow");
                 },
-
                 hideModal: function () {
                     this.$overlay.hide();
                     this.$modal.hide();
                 },
-
                 reset: function () {
                     this.hideModal();
                     this.shuffleCards(this.cardsArray);
                     this.setup();
                     this.$game.show("slow");
                 },
-
                 shuffle: function (array) {
                     var counter = array.length, temp, index;
                     while (counter > 0) {
@@ -302,16 +281,13 @@
                     }
                     return array;
                 },
-
                 buildHTML: function () {
                     var frag = '';
                     this.$cards.each(function (k, v) {
-                        frag += '<div class="card" data-id="' + v.id + '"><div class="inside">\
-				<div class="front"><img src="' + v.img + '"\
-				alt="' + v.name + '" /></div>\
-				<div class="back"><img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80"\
-				alt="Animal Card" /></div></div>\
-				</div>';
+                        frag += '<div class="card" data-id="' + v.id + '"><div class="inside">' +
+                            '<div class="front"><img src="' + v.img + '" alt="' + v.name + '" /></div>' +
+                            '<div class="back"><span class="back-label">Animals</span></div>' +
+                            '</div></div>';
                     });
                     return frag;
                 }
@@ -320,71 +296,69 @@
             var cards = [
                 {
                     name: "Lion",
-                    img: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/247502/pexels-photo-247502.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 1
                 },
                 {
                     name: "Tiger",
-                    img: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/145939/pexels-photo-145939.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 2
                 },
                 {
                     name: "Elephant",
-                    img: "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/66898/elephant-cub-tsavo-kenya-66898.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 3
                 },
                 {
                     name: "Zebra",
-                    img: "https://images.unsplash.com/photo-1526318472351-c75fcf070305?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/750539/pexels-photo-750539.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 4
                 },
                 {
                     name: "Giraffe",
-                    img: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=800&q=80",
+                    img: "https://animals.sandiegozoo.org/sites/default/files/2016-11/animals_hero_giraffe_1_0.jpg",
                     id: 5
                 },
                 {
                     name: "Panda",
-                    img: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/3608263/pexels-photo-3608263.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 6
                 },
                 {
                     name: "Koala",
-                    img: "https://images.unsplash.com/photo-1520808663317-647b476a81b9?auto=format&fit=crop&w=800&q=80",
+                    img: "https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL2tvYWxhcy0xLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6IjEyMDAifX19",
                     id: 7
                 },
                 {
                     name: "Fox",
-                    img: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/247373/pexels-photo-247373.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 8
                 },
                 {
                     name: "Wolf",
-                    img: "https://images.unsplash.com/photo-1474511016488-0067309c4c28?auto=format&fit=crop&w=800&q=80",
+                    img: "https://images.pexels.com/photos/236603/pexels-photo-236603.jpeg?auto=compress&cs=tinysrgb&w=800",
                     id: 9
                 },
                 {
                     name: "Owl",
-                    img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=800&q=80",
+                    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHV_xANXIbhmPU3yu9GFOVTjY8miTr3PdyPQ&s",
                     id: 10
                 },
                 {
                     name: "Penguin",
-                    img: "https://images.unsplash.com/photo-1551986782-d0169b3f8fa7?auto=format&fit=crop&w=800&q=80",
+                    img: "https://res.cloudinary.com/enchanting/q_70,f_auto,c_fill,g_face/quark-web/2024/09/King_Penguin_michellesole-4742.jpg",
                     id: 11
                 },
                 {
                     name: "Dolphin",
-                    img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+                    img: "https://www.bornfree.org.uk/wp-content/uploads/2023/09/bottlenose-dolphin-iStock.jpg",
                     id: 12
                 }
             ];
 
             Memory.init(cards);
-
         })();
     </script>
 
 </body>
-
 </html>
